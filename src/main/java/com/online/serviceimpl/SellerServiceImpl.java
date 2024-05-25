@@ -79,7 +79,7 @@ public class SellerServiceImpl extends HomeService implements SellerService{
 	}
 
 	@Override
-	public Seller findByEmail(String email) {
+	public List<Seller> findByEmail(String email) {
 		// TODO Auto-generated method stub
 		return sellerRepo.findByEmail(email);
 	}

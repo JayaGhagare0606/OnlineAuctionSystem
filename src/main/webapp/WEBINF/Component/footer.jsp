@@ -3,7 +3,7 @@
 		style="height: 50px;"
 		>
 	<section class= "mt-2">
-		Online Auction System &copy; Copyright;
+		Online Auction System &copy; Copyright
 		<%
 			out.print(Year.now().getValue());
 		%>

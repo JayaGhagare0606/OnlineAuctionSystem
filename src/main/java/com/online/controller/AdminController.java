@@ -2,6 +2,7 @@ package com.online.controller;
 
 import java.util.Date;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,8 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.online.context.AdminContext;
 import com.online.model.Admin;
 import com.online.serviceimpl.AdminServiceImpl;
+
+
 
 @Controller
 @RequestMapping("/api/admin")
@@ -23,6 +27,7 @@ public class AdminController {
 	@GetMapping("/adminLogin")
 	public String adminLogin(Model m) {
 		m.addAttribute("admin", new Admin());
+		m.addAttribute("btn", "Login");
 		return "adminLogin";
 	}
 
@@ -33,25 +38,33 @@ public class AdminController {
 
 		if (email.isEmpty()) {
 			m.addAttribute("error", "Email is Required.");
+			m.addAttribute("btn", "Login");
 			return "adminLogin";
 		}
 
 		if (password.isEmpty()) {
 			m.addAttribute("error", "Password is Required.");
+			m.addAttribute("btn", "Login");
 			return "adminLogin";
 		}
 		Admin fEAP = adminService.findByEmailAndPassword(email, password);
 		if (fEAP == null) {
 			m.addAttribute("error", "Invalid Email or password.");
+			m.addAttribute("btn", "Login");
 			return "adminLogin";
 		}
-
+		AdminContext.ADMIN_USER_NAME = fEAP.getFullname();
+		AdminContext.ADMIN_USER_TYPE = fEAP.getType();
 		m.addAttribute("data", fEAP);
+		m.addAttribute("btn", "Logout");
+		
 		return "dashboard";
 	}
 
 	@GetMapping("/adminList")
 	public String adminList(Model m) {
+		m.addAttribute("fullname" , AdminContext.ADMIN_USER_NAME);
+		m.addAttribute("type", AdminContext.ADMIN_USER_TYPE);
 		m.addAttribute("adminList", adminService.adminList());
 		return "adminList";
 	}
@@ -66,6 +79,8 @@ public class AdminController {
 		m.addAttribute("admin", new Admin());
 		m.addAttribute("route", "/api/admin/doAddAdmin");
 		m.addAttribute("TitleName", "AddAdmin");
+		m.addAttribute("fullname" , AdminContext.ADMIN_USER_NAME);
+		m.addAttribute("type", AdminContext.ADMIN_USER_TYPE);
 		m.addAttribute("btn", "Add Admin");
 		return "addAdmin";
 	}
@@ -124,8 +139,8 @@ public class AdminController {
 			admin.setCreated(new Date());
 			admin.setModified(new Date());
 			admin.setStatus(1);
+			
 			String saveAdmin = adminService.saveAdmin(admin);
-
 			if (saveAdmin == "no") {
 				m.addAttribute("route", "/api/admin/doAddAdmin");
 				m.addAttribute("TitleName", "AddAdmin");
@@ -136,6 +151,9 @@ public class AdminController {
 				m.addAttribute("route", "/api/admin/doAddAdmin");
 				m.addAttribute("TitleName", "AddAdmin");
 				m.addAttribute("btn", "Add Admin");
+				System.out.println("AdminContexName=> "+AdminContext.ADMIN_USER_NAME);
+				m.addAttribute("fullname", AdminContext.ADMIN_USER_NAME);
+				m.addAttribute("type", AdminContext.ADMIN_USER_TYPE);
 				m.addAttribute("success", "Add Admin Successfully.");
 				return "addAdmin";
 
@@ -169,6 +187,7 @@ public class AdminController {
 		String email = admin.getEmail();
 		String password = admin.getPassword();
 		String mobile = admin.getMobile();
+		int status = admin.getStatus();
 		String type = admin.getType();
 		
 		System.out.println(fullname);
@@ -176,6 +195,7 @@ public class AdminController {
 		System.out.println(password);
 		System.out.println(mobile);
 		System.out.println(type);
+		System.out.println(status);
 		
 		if(fullname.isEmpty()) {
 			m.addAttribute("route", "/api/admin/UpdateAdmin/"+id);
@@ -228,6 +248,8 @@ public class AdminController {
 				m.addAttribute("TitleName", "Update Admin");
 				m.addAttribute("btn", "Update Admin");
 				m.addAttribute("success", "Update Admin Successfully.");
+				m.addAttribute("name",fullname);
+				m.addAttribute("type", type);
 				return "redirect:/api/admin/adminList";
 				
 			}

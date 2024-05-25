@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.online.context.BuyerContext;
 import com.online.model.AuctionItem;
 import com.online.service.AuctionitemService;
 
@@ -15,7 +16,7 @@ public class AuctionItemServiceImpl extends HomeService implements AuctionitemSe
 	@Override
 	public List<AuctionItem> auctionitemList() {
 		// TODO Auto-generated method stub
-		return auctionitemRepo.findAll(Sort.by(Sort.Direction.ASC, "fullname"));
+		return auctionitemRepo.findByStatus();
 	}
 
 	@Override
@@ -29,7 +30,7 @@ public class AuctionItemServiceImpl extends HomeService implements AuctionitemSe
 	}
 
 	@Override
-	public AuctionItem findAuctionItemByIt(int id) {
+	public AuctionItem findAuctionItemById(int id) {
 		// TODO Auto-generated method stub
 		List<AuctionItem> auctionitemList = auctionitemList();
 		AuctionItem a = null;
@@ -44,13 +45,12 @@ public class AuctionItemServiceImpl extends HomeService implements AuctionitemSe
 	@Override
 	public String updateAuctionItem(AuctionItem auctionitem, int id) {
 		// TODO Auto-generated method stub
-		AuctionItem oldAuctionItem = findAuctionItemByIt(id);
+		AuctionItem oldAuctionItem = findAuctionItemById(id);
 		
-		oldAuctionItem.setFullname(auctionitem.getFullname());
-		oldAuctionItem.setEmail(auctionitem.getEmail());
-		oldAuctionItem.setImage(auctionitem.getImage());
-		oldAuctionItem.setStatus(auctionitem.getStatus());
-		oldAuctionItem.setCreated(new Date());
+		
+		oldAuctionItem.setBuyerUserName(BuyerContext.BUYER_USER_NAME);
+		oldAuctionItem.setBuyerBid(auctionitem.getBuyerBid());
+		oldAuctionItem.setStatus(1);
 		oldAuctionItem.setModified(new Date());
 		
 		AuctionItem save = auctionitemRepo.save(oldAuctionItem);
@@ -63,9 +63,62 @@ public class AuctionItemServiceImpl extends HomeService implements AuctionitemSe
 	@Override
 	public String deleteAuctionItem(int id) {
 		// TODO Auto-generated method stub
-		AuctionItem AuctionItem = findAuctionItemByIt(id);
+		AuctionItem AuctionItem = findAuctionItemById(id);
 		auctionitemRepo.delete(AuctionItem);
 		return "done";
 	}
+
+	@Override
+	public List<AuctionItem> findByEmail(String email) {
+		// TODO Auto-generated method stub
+		return auctionitemRepo.findByEmail(email);
+	}
+
+	@Override
+	public AuctionItem acceptUpdateAuctionItem(int id) {
+		// TODO Auto-generated method stub
+		AuctionItem oldAuctionItem = findAuctionItemById(id);
+		// status = 1; (Means processing)
+		// status = 2 ; (Means accepted.)
+		
+		oldAuctionItem.setStatus(2);
+		oldAuctionItem.setModified(new Date());
+		AuctionItem save = auctionitemRepo.save(oldAuctionItem);
+		
+		return save ;
+	}
+
+	@Override
+	public String declineUpdateAuctionItem(int id) {
+		// TODO Auto-generated method stub
+		AuctionItem oldAuctionItem = findAuctionItemById(id);
+		oldAuctionItem.setBuyerUserName("");
+		oldAuctionItem.setBuyerBid(0);
+		oldAuctionItem.setModified(new Date());
+		
+		AuctionItem save = auctionitemRepo.save(oldAuctionItem);
+		if(save == null) {
+			return "no";
+		}
+		return "yes";
+	}
+
+	@Override
+	public List<AuctionItem> soldItemHistory(String email, int status) {
+		// TODO Auto-generated method stub
+		return auctionitemRepo.soldItemHistory(email, status);
+	}
+
+	@Override
+	public List<AuctionItem> buyerPurchasedItem(String email) {
+		// TODO Auto-generated method stub
+		return auctionitemRepo.buyerPurchasedItem(email);
+	}
+
+//	@Override
+//	public AuctionItem findEmail(String email) {
+//		// TODO Auto-generated method stub
+//		return auctionitemRepo.findEmail(email);
+//	}
 
 }

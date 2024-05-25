@@ -12,14 +12,13 @@
 		<div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 				<li class="nav-item"><a class="nav-link active"
-					aria-current="page" href="#">Home</a></li>
-				<li class="nav-item"><a class="nav-link" href="#">Link</a></li>
-				<li class="nav-item"><a class="nav-link disabled" href="#"
-					tabindex="-1" aria-disabled="true">Disabled</a></li>
+					aria-current="page" href="/">Home</a></li>
+				<li class="nav-item"><a class="nav-link" href="/api/service">Service</a></li>
+				<li class="nav-item"><a class="nav-link" href="/api/aboutUs">AboutUs</a></li>
 			</ul>
 			<a href="/api/login">
 			<button class="btn btn-primary d-grid mx-end" type="submit"
-				style="margin-right: 10px;">Login</button>
+				style="margin-right: 10px;">${btn}</button>
 			</a>
 			<!-- <form class="d-flex">
 				<input class="form-control me-2" type="search" placeholder="Search"

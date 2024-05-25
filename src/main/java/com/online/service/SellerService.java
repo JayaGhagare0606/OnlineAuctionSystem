@@ -16,7 +16,7 @@ public interface SellerService {
 	
 	public String deleteSeller(int id);
 	
-	public Seller findByEmail(String email);
+	public List<Seller> findByEmail(String email);
 	
 	public Seller findByEmailAndPassword(String email, String password);
 

@@ -51,7 +51,7 @@ public class AdminServiceImpl extends HomeService implements AdminService{
 		oldAdmin.setPassword(admin.getPassword());
 		oldAdmin.setMobile(admin.getMobile());
 		oldAdmin.setType(admin.getType());
-		oldAdmin.setStatus(1);
+		oldAdmin.setStatus(admin.getStatus());
 		oldAdmin.setModified(new Date());
 		
 		Admin save = adminRepo.save(oldAdmin);

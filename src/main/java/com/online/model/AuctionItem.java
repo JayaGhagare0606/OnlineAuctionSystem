@@ -3,6 +3,7 @@ package com.online.model;
 import java.util.Arrays;
 import java.util.Date;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,12 +19,21 @@ public class AuctionItem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	private String fullname;
+	private String productname;
 	
 	private String email;
 	
 	@Lob
+	@Column(columnDefinition = "longblob")
 	private byte[] image;
+	
+	private String encodeImage;
+	
+	private int bidingStartingAmount;
+	
+	private String buyerUserName;
+	
+	private int buyerBid;
 	
 	private int status;
 	
@@ -41,12 +51,12 @@ public class AuctionItem {
 		this.id = id;
 	}
 
-	public String getFullname() {
-		return fullname;
+	public String getProductname() {
+		return productname;
 	}
 
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
+	public void setProductname(String productname) {
+		this.productname = productname;
 	}
 
 	public String getEmail() {
@@ -63,6 +73,30 @@ public class AuctionItem {
 
 	public void setImage(byte[] image) {
 		this.image = image;
+	}
+
+	public int getBidingStartingAmount() {
+		return bidingStartingAmount;
+	}
+
+	public void setBidingStartingAmount(int bidingStartingAmount) {
+		this.bidingStartingAmount = bidingStartingAmount;
+	}
+
+	public String getBuyerUserName() {
+		return buyerUserName;
+	}
+
+	public void setBuyerUserName(String buyerUserName) {
+		this.buyerUserName = buyerUserName;
+	}
+
+	public int getBuyerBid() {
+		return buyerBid;
+	}
+
+	public void setBuyerBid(int buyerBid) {
+		this.buyerBid = buyerBid;
 	}
 
 	public int getStatus() {
@@ -88,13 +122,38 @@ public class AuctionItem {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
+	
+	
 
-	public AuctionItem(int id, String fullname, String email, byte[] image, int status, Date modified, Date created) {
+	public String getEncodeImage() {
+		return encodeImage;
+	}
+
+	public void setEncodeImage(String encodeImage) {
+		this.encodeImage = encodeImage;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "AuctionItem [id=" + id + ", productname=" + productname + ", email=" + email + ", image="
+				+ Arrays.toString(image) + ", encodeImage=" + encodeImage + ", bidingStartingAmount="
+				+ bidingStartingAmount + ", buyerUserName=" + buyerUserName + ", buyerBid=" + buyerBid + ", status="
+				+ status + ", modified=" + modified + ", created=" + created + "]";
+	}
+
+	public AuctionItem(int id, String productname, String email, byte[] image, String encodeImage,
+			int bidingStartingAmount, String buyerUserName, int buyerBid, int status, Date modified, Date created) {
 		super();
 		this.id = id;
-		this.fullname = fullname;
+		this.productname = productname;
 		this.email = email;
 		this.image = image;
+		this.encodeImage = encodeImage;
+		this.bidingStartingAmount = bidingStartingAmount;
+		this.buyerUserName = buyerUserName;
+		this.buyerBid = buyerBid;
 		this.status = status;
 		this.modified = modified;
 		this.created = created;
@@ -105,11 +164,6 @@ public class AuctionItem {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public String toString() {
-		return "AuctionItem [id=" + id + ", fullname=" + fullname + ", email=" + email + ", image="
-				+ Arrays.toString(image) + ", status=" + status + ", modified=" + modified + ", created=" + created
-				+ "]";
-	}
+	
 
 }
